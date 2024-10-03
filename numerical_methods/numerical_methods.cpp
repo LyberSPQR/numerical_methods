@@ -9,98 +9,38 @@ void extendedMatrixOutput(vector<vector<double>> extendedMatrix, const int N);
 int main()
 {
 	setlocale(LC_ALL, "ru");
-	const int N = 4, M = 3;
-	double l1=0, l2=0, l3=0;
 	int n;
 	double x, y, z;
 	x = 1.71;
 	y = 8.64;
 	z = 1.71 / 8.64;
-	double matrix[M][M] = {8.64,1.71,5.42,
-					 -6.39,4.25,1.84,
-					 4.21, 7.92,-3.41};
-	cout << "Z= " << z << endl;
-	cout << "Выберите вариант задания:" << endl << "1 - вариант 6" << endl <<  "2 - вариант 21" << endl << "3 - ввод данных вручную" << endl;
-	cin >> n;
 
-	switch (n)
-	{
-		case 1:
-		{
-			double matrix[M][M] = {8.64,1.71,5.42,
-					 -6.39,4.25,1.84,
-					 4.21, 7.92,-3.41};
-			vector<double> vec = { 10.21,3.41,12.29 };
-		}
-		case 3:
-		{
-			int arrSize,vecSize;
-			cout << "Введите размер матрицы" << endl;
-			cin >> vecSize;
-				
-			vector<vector<double>> Matrix(arrSize, vector<double>(arrSize));
-				
-			vector<double> vec(vecSize);
+	int arrSize, vecSize;
+	cout << "Введите размер матрицы и вектора" << endl;
+	cin >> arrSize;
+	vecSize = arrSize;
 
-			for (int i = 0; i < arrSize; i++) // заполнение расширенной матрицы
-			{
-				for (int j = 0; j < arrSize; j++)
-				{
-					cin >> Matrix[i][j];
-				}
-				Matrix[i].push_back(vec[i]);
-			}
-		}
-		break;
-		case 2:
-		{
-			cout << "Введите параметры λ1, λ2, λ3" << endl;
-			cin >> l1, l2, l3;
-			double matrix[M][M] = { 2*l1 + 4*l2, 2*(l1-l2), 2 * (l1 - l2),
-					2 * (l1 - l2), 2*l1+l2+3*l3, 2 * l1 + l2 - 3 * l3,
-					2 * (l1 - l2), 2 * l1 + l2 - 3 * l3, 2 * l1 + l2 + 3 * l3 };
-			vector<double> vec = { -4*l1-2*l2, -4 * l1 + l2 + 9 * l3, -4 * l1 + l2 - 9 * l3 };
-		}
-		break;
-		default:
-		{
-			cout << "Введено неверное значение";
-			return 0;
-		}
-
-	}
-
-	//double matrix[N][N] = {8.64,1.71,5.42,
-	//					 -6.39,4.25,1.84,
-	//					 4.21, 7.92,-3.41};
-	//vector<double> vec = { 10.21,3.41,12.29 };
-
-	/*double matrix[N][N] = { 8.0,4.0,2.0,
-						 1.0,3.0,5.0,
-						 2.0, 4.0,5.0 };
-	vector<double> vec = { 10.0,3.0,12.0 };*/
-
-	//double matrix[N][N] = { 1.0,1.0,1.0,1.0,
-	//					 1.0,2.0,-2.0, 3.0,
-	//					 2.0, 0.0,1.0, 0.0,
-	//					 3.0, 1.0, 2.0, 2.0};
-	//vector<double> vec = { 10.0,11.0,5.0, 19.0};
-
-	//vector<double> vec1;
-	//vector<vector<double>> extendedMatrix(N, vector<double>(N));
-
-		//for (int i = 0; i < N; i++) // заполнение расширенной матрицы
-		//{
-		//	for (int j = 0; j < N; j++)
-		//	{
-		//		extendedMatrix[i][j] = matrix[i][j];
-		//	}
-		//	extendedMatrix[i].push_back(vec[i]);
-		//}
-		//extendedMatrixOutput(extendedMatrix, N);
-
-		
-		for (int g = 0; g < N; g++)
+	vector<vector<double>> extendedMatrix(arrSize, vector<double>(arrSize));
+	extendedMatrix = { {1.0,1.0,1.0,1.0,10.0},{1,2,-2,3,11},{2,0,1,0,5}, {3,1,2,2,19} };
+	vector<double> vec(vecSize);
+	vector<double> vec1(vecSize);
+	//cout << "Введите элементы вектора " << vecSize << endl;
+	//for (int i = 0; i < vecSize; i++)
+	//{
+	//	cin >> vec[i];
+	//}
+	//cout << "Введите элементы матрицы порядка " << arrSize << endl;
+	//for (int i = 0; i < arrSize; i++) // заполнение расширенной матрицы
+	//{
+	//	for (int j = 0; j < arrSize; j++)
+	//	{
+	//		cin >> extendedMatrix[i][j];
+	//	}
+	//	extendedMatrix[i].push_back(vec[i]);
+	//}
+	cout << "Матрица:" << endl;
+	extendedMatrixOutput(extendedMatrix, arrSize);
+		for (int g = 0; g < arrSize; g++)
 		{
 			if (extendedMatrix[g][g] == 0)
 			{
@@ -108,78 +48,67 @@ int main()
 				return 0;
 			}
 
-			for (int i = 0 + g; i < N; i++) // деление всех элементов строк на первый элемент строки
+			double maxElement = extendedMatrix[g][g];
+			int maxRow = g;
+			for (int j = g; j < arrSize; j++)
+			{
+				if (abs(extendedMatrix[j][g]) > abs(maxElement))
+				{
+					maxElement = extendedMatrix[j][g];
+					maxRow = j;
+				}		
+			} 
+			//SWAP
+			swap(extendedMatrix[g], extendedMatrix[maxRow]);
+			/*vector<double> temp(arrSize);
+			temp = extendedMatrix[g];
+			extendedMatrix[g] = extendedMatrix[maxRow];
+			extendedMatrix[maxRow] = temp;*/
+
+			cout << "Матрица после смены:" << endl;
+			extendedMatrixOutput(extendedMatrix, arrSize);
+
+			for (int i = 0 + g; i < arrSize; i++) // деление всех элементов строк на первый элемент строки
 			{
 				double temp = extendedMatrix[i][g];
 				/*cout << endl << "temp " << temp << endl;*/
-				for (int j = 0 + g; j < N + 1; j++)
+				for (int j = 0 + g; j < arrSize + 1; j++)
 				{
 					extendedMatrix[i][j] = extendedMatrix[i][j] / temp;
 				}
 			}
-			/*extendedMatrixOutput(extendedMatrix, N);*/
 
-			for (int i = 1 + g; i < N; i++)
+			for (int i = 1 + g; i < arrSize; i++)
 			{
 				
-				for (int j = 0 + g; j < N  + 1; j++)
+				for (int j = 0 + g; j < arrSize + 1; j++)
 				{
 					extendedMatrix[i][j] = extendedMatrix[i][j] - extendedMatrix[g][j];
 				}
 			}
-			/*extendedMatrixOutput(extendedMatrix, N);*/
-			
-			extendedMatrixOutput(extendedMatrix, N);
-			for (int i = 0; i < N; i++) {
+
+			extendedMatrixOutput(extendedMatrix, arrSize);
+			for (int i = 0; i < arrSize; i++) {
 				if (i != g) {
 					double factor = extendedMatrix[i][g];
-					for (int j = g; j < N + 1; j++) {
+					for (int j = g; j < arrSize + 1; j++) {
 						extendedMatrix[i][j] -= factor * extendedMatrix[g][j];
 					}
 				}
 			}
-			extendedMatrixOutput(extendedMatrix, N);
+			extendedMatrixOutput(extendedMatrix, arrSize);
 			cout << endl << "end of cycle " << g + 1 << endl << endl;
 		}
-		/*extendedMatrixOutput(extendedMatrix, N);*/
 
-		for (int i = 0; i < N; i++)
+		for (int i = 0; i < arrSize; i++)
 		{
-			vec1.push_back(extendedMatrix[i][N]);
+			vec1[i] = extendedMatrix[i][arrSize];
 		}
 		cout << "vec1= ";
-		for (int i = 0; i < N; i++)
+		for (int i = 0; i < vecSize; i++)
 		{
 			cout << vec1[i] << " ";
 		}
-			/*for (int j = N - 2; j >= 0; j--)
-			{
-
-				for (int i = N - 1; i >= 0; i--)
-				{
-					double temp = extendedMatrix[i][j];
-					for (int k = i; k < N; k++)
-					{
-						extendedMatrix[i][k] = extendedMatrix[i][k] - extendedMatrix[i + 1][j] * temp;
-					}
-
-				}
-			}
-			extendedMatrixOutput(extendedMatrix, N);*/
-
-			/*for (int i = 1 + g; i < N; i++)
-			{
-
-				for (int j = 0 + g; j < N + 1; j++)
-				{
-					extendedMatrix[i][j] = extendedMatrix[i][j] - extendedMatrix[g][j];
-				}
-			}*/
-		/*	extendedMatrixOutput(extendedMatrix, N);*/
-		/*	cout << endl << "end of cycle " << g + 1 << endl << endl;*/
-		
-		
-
 }
 void extendedMatrixOutput(vector<vector<double>> extendedMatrix, const int N)
 {
