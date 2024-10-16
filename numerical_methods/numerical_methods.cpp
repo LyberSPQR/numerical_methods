@@ -9,11 +9,11 @@ void extendedMatrixOutput(vector<vector<double>> extendedMatrix, const int N);
 int main()
 {
 	setlocale(LC_ALL, "ru");
-	int n;
-	double x, y, z;
-	x = 1.71;
-	y = 8.64;
-	z = 1.71 / 8.64;
+	//int n;
+	//double x, y, z;
+	//x = 1.71;
+	//y = 8.64;
+	//z = 1.71 / 8.64;
 
 	int arrSize, vecSize;
 	cout << "Введите размер матрицы и вектора" << endl;
@@ -59,7 +59,11 @@ int main()
 				}		
 			} 
 			//SWAP
-			swap(extendedMatrix[g], extendedMatrix[maxRow]);
+			if (maxRow != g)
+			{
+				swap(extendedMatrix[g], extendedMatrix[maxRow]);
+			}
+			
 			/*vector<double> temp(arrSize);
 			temp = extendedMatrix[g];
 			extendedMatrix[g] = extendedMatrix[maxRow];
