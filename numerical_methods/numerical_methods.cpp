@@ -9,11 +9,7 @@ void extendedMatrixOutput(vector<vector<double>> extendedMatrix, const int N);
 int main()
 {
 	setlocale(LC_ALL, "ru");
-	//int n;
-	//double x, y, z;
-	//x = 1.71;
-	//y = 8.64;
-	//z = 1.71 / 8.64;
+
 
 	int arrSize, vecSize;
 	cout << "Введите размер матрицы и вектора" << endl;
@@ -21,7 +17,12 @@ int main()
 	vecSize = arrSize;
 
 	vector<vector<double>> extendedMatrix(arrSize, vector<double>(arrSize));
-	extendedMatrix = { {1.0,1.0,1.0,1.0,10.0},{1,2,-2,3,11},{2,0,1,0,5}, {3,1,2,2,19} };
+	/*extendedMatrix = { {1.0,1.0,1.0,1.0,10.0},{1,2,-2,3,11},{2,0,1,0,5}, {3,1,2,2,19} };*/
+	extendedMatrix = { {8.64,1.71,5.42,10.21},{-6.39,4.25,1.84,3.41},{4.21,7.92,-3.41,12.29}};
+
+	//extendedMatrix = { {1,2,1,1},{-1,-2,2,1},{0,1,1,2} };
+
+	/*extendedMatrix = { {1,2,2},{2,4,5}};*/
 	vector<double> vec(vecSize);
 	vector<double> vec1(vecSize);
 	//cout << "Введите элементы вектора " << vecSize << endl;
@@ -42,11 +43,6 @@ int main()
 	extendedMatrixOutput(extendedMatrix, arrSize);
 		for (int g = 0; g < arrSize; g++)
 		{
-			if (extendedMatrix[g][g] == 0)
-			{
-				cout << "IER = 1";
-				return 0;
-			}
 
 			double maxElement = extendedMatrix[g][g];
 			int maxRow = g;
@@ -72,14 +68,25 @@ int main()
 			cout << "Матрица после смены:" << endl;
 			extendedMatrixOutput(extendedMatrix, arrSize);
 
+			if (extendedMatrix[g][g] == 0)
+			{
+				cout << "IER = 1";
+				return 0;
+			}
+
 			for (int i = 0 + g; i < arrSize; i++) // деление всех элементов строк на первый элемент строки
 			{
+				
 				double temp = extendedMatrix[i][g];
-				/*cout << endl << "temp " << temp << endl;*/
-				for (int j = 0 + g; j < arrSize + 1; j++)
+				if (temp != 0)
 				{
-					extendedMatrix[i][j] = extendedMatrix[i][j] / temp;
+					for (int j = 0 + g; j < arrSize + 1; j++)
+					{
+						extendedMatrix[i][j] = extendedMatrix[i][j] / temp;
+					}
 				}
+				/*cout << endl << "temp " << temp << endl;*/
+				
 			}
 
 			for (int i = 1 + g; i < arrSize; i++)
