@@ -3,133 +3,152 @@
 #include <iostream>
 #include <vector>
 #include <iomanip>
+#include <cmath>
 
 using namespace std;
+
 void extendedMatrixOutput(vector<vector<double>> extendedMatrix, const int N);
+
 int main()
 {
-	setlocale(LC_ALL, "ru");
+    setlocale(LC_ALL, "ru");
 
+    int arrSize, vecSize;
+    cout << "Введите размер матрицы и вектора" << endl;
+    cin >> arrSize;
+    vecSize = arrSize;
 
-	int arrSize, vecSize;
-	cout << "Введите размер матрицы и вектора" << endl;
-	cin >> arrSize;
-	vecSize = arrSize;
+    vector<vector<double>> extendedMatrix(arrSize, vector<double>(arrSize));
 
-	vector<vector<double>> extendedMatrix(arrSize, vector<double>(arrSize));
-	/*extendedMatrix = { {1.0,1.0,1.0,1.0,10.0},{1,2,-2,3,11},{2,0,1,0,5}, {3,1,2,2,19} };*/
-	extendedMatrix = { {8.64,1.71,5.42,10.21},{-6.39,4.25,1.84,3.41},{4.21,7.92,-3.41,12.29}};
+    extendedMatrix = { {+2.5, -3.0, 4.6, -1.05},
+                   {-3.5, 2.6, 1.5, -14.46},
+                   {-6.5, -3.5, 7.3,-17.73} };
 
-	//extendedMatrix = { {1,2,1,1},{-1,-2,2,1},{0,1,1,2} };
+    vector<double> vec(vecSize);
+    vector<double> vec1(vecSize);
 
-	/*extendedMatrix = { {1,2,2},{2,4,5}};*/
-	vector<double> vec(vecSize);
-	vector<double> vec1(vecSize);
-	//cout << "Введите элементы вектора " << vecSize << endl;
-	//for (int i = 0; i < vecSize; i++)
-	//{
-	//	cin >> vec[i];
-	//}
-	//cout << "Введите элементы матрицы порядка " << arrSize << endl;
-	//for (int i = 0; i < arrSize; i++) // заполнение расширенной матрицы
-	//{
-	//	for (int j = 0; j < arrSize; j++)
-	//	{
-	//		cin >> extendedMatrix[i][j];
-	//	}
-	//	extendedMatrix[i].push_back(vec[i]);
-	//}
-	cout << "Матрица:" << endl;
-	extendedMatrixOutput(extendedMatrix, arrSize);
-		for (int g = 0; g < arrSize; g++)
-		{
+    // Сохранение оригинальной матрицы A и вектора b
+    vector<vector<double>> originalMatrix = extendedMatrix; 
+    vector<double> originalB(vecSize);
+    for (int i = 0; i < arrSize; i++) {
+        originalB[i] = extendedMatrix[i][arrSize];
+    }
 
-			double maxElement = extendedMatrix[g][g];
-			int maxRow = g;
-			for (int j = g; j < arrSize; j++)
-			{
-				if (abs(extendedMatrix[j][g]) > abs(maxElement))
-				{
-					maxElement = extendedMatrix[j][g];
-					maxRow = j;
-				}		
-			} 
-			//SWAP
-			if (maxRow != g)
-			{
-				swap(extendedMatrix[g], extendedMatrix[maxRow]);
-			}
-			
-			/*vector<double> temp(arrSize);
-			temp = extendedMatrix[g];
-			extendedMatrix[g] = extendedMatrix[maxRow];
-			extendedMatrix[maxRow] = temp;*/
+    cout << "Матрица:" << endl;
+    extendedMatrixOutput(extendedMatrix, arrSize);
 
-			cout << "Матрица после смены:" << endl;
-			extendedMatrixOutput(extendedMatrix, arrSize);
+    for (int g = 0; g < arrSize; g++)
+    {
+        double maxElement = extendedMatrix[g][g];
+        int maxRow = g;
+        for (int j = g; j < arrSize; j++)
+        {
+            if (abs(extendedMatrix[j][g]) > abs(maxElement))
+            {
+                maxElement = extendedMatrix[j][g];
+                maxRow = j;
+            }
+        }
 
-			if (extendedMatrix[g][g] == 0)
-			{
-				cout << "IER = 1";
-				return 0;
-			}
+        // SWAP
+        if (maxRow != g)
+        {
+            swap(extendedMatrix[g], extendedMatrix[maxRow]);
+        }
 
-			for (int i = 0 + g; i < arrSize; i++) // деление всех элементов строк на первый элемент строки
-			{
-				
-				double temp = extendedMatrix[i][g];
-				if (temp != 0)
-				{
-					for (int j = 0 + g; j < arrSize + 1; j++)
-					{
-						extendedMatrix[i][j] = extendedMatrix[i][j] / temp;
-					}
-				}
-				/*cout << endl << "temp " << temp << endl;*/
-				
-			}
+        cout << "Матрица после смены:" << endl;
+        extendedMatrixOutput(extendedMatrix, arrSize);
 
-			for (int i = 1 + g; i < arrSize; i++)
-			{
-				
-				for (int j = 0 + g; j < arrSize + 1; j++)
-				{
-					extendedMatrix[i][j] = extendedMatrix[i][j] - extendedMatrix[g][j];
-				}
-			}
+        if (extendedMatrix[g][g] == 0)
+        {
+            cout << "IER = 1";
+            return 0;
+        }
 
-			extendedMatrixOutput(extendedMatrix, arrSize);
-			for (int i = 0; i < arrSize; i++) {
-				if (i != g) {
-					double factor = extendedMatrix[i][g];
-					for (int j = g; j < arrSize + 1; j++) {
-						extendedMatrix[i][j] -= factor * extendedMatrix[g][j];
-					}
-				}
-			}
-			extendedMatrixOutput(extendedMatrix, arrSize);
-			cout << endl << "end of cycle " << g + 1 << endl << endl;
-		}
+        for (int i = 0 + g; i < arrSize; i++) // деление всех элементов строк на первый элемент строки
+        {
+            double temp = extendedMatrix[i][g];
+            if (temp != 0)
+            {
+                for (int j = 0 + g; j < arrSize + 1; j++)
+                {
+                    extendedMatrix[i][j] = extendedMatrix[i][j] / temp;
+                }
+            }
+        }
 
-		for (int i = 0; i < arrSize; i++)
-		{
-			vec1[i] = extendedMatrix[i][arrSize];
-		}
-		cout << "vec1= ";
-		for (int i = 0; i < vecSize; i++)
-		{
-			cout << vec1[i] << " ";
-		}
+        for (int i = 1 + g; i < arrSize; i++)
+        {
+            for (int j = 0 + g; j < arrSize + 1; j++)
+            {
+                extendedMatrix[i][j] = extendedMatrix[i][j] - extendedMatrix[g][j];
+            }
+        }
+
+        extendedMatrixOutput(extendedMatrix, arrSize);
+
+        for (int i = 0; i < arrSize; i++) {
+            if (i != g) {
+                double factor = extendedMatrix[i][g];
+                for (int j = g; j < arrSize + 1; j++) {
+                    extendedMatrix[i][j] -= factor * extendedMatrix[g][j];
+                }
+            }
+        }
+
+        extendedMatrixOutput(extendedMatrix, arrSize);
+        cout << endl << "end of cycle " << g + 1 << endl << endl;
+    }
+
+    for (int i = 0; i < arrSize; i++)
+    {
+        vec1[i] = extendedMatrix[i][arrSize];
+    }
+
+    cout << "Решение (x): ";
+    for (int i = 0; i < vecSize; i++)
+    {
+        cout << vec1[i] << " ";
+    }
+    cout << endl;
+
+    // Вычисление вектора невязки F = A * x - b
+    vector<double> residual(vecSize, 0.0);
+    for (int i = 0; i < arrSize; i++) {
+        double sum = 0.0;
+        for (int j = 0; j < arrSize; j++) {
+            sum += originalMatrix[i][j] * vec1[j];
+        }
+        residual[i] = sum - originalB[i];
+    }
+
+    // Вывод вектора невязки
+    cout << "\nВектор невязки F: ";
+    for (double r : residual) {
+        cout << r << " ";
+    }
+    cout << endl;
+
+    // Вычисление нормы вектора невязки
+    double norm = 0.0;
+    for (double r : residual) {
+        norm += r * r;
+    }
+    norm = sqrt(norm);
+    cout << "Норма вектора невязки ||F||: " << norm << endl;
+
+    return 0;
 }
+
 void extendedMatrixOutput(vector<vector<double>> extendedMatrix, const int N)
 {
-	for (int i = 0; i < N; i++) // вывод расширенной матрицы
-	{
-		for (int j = 0; j < N + 1; j++)
-		{
-			cout << extendedMatrix[i][j] << left << setw(12);
-		}
-		cout << endl;
-	}
-	cout << endl << endl;
+    for (int i = 0; i < N; i++) // вывод расширенной матрицы
+    {
+        for (int j = 0; j < N + 1; j++)
+        {
+            cout << extendedMatrix[i][j] << left << setw(12);
+        }
+        cout << endl;
+    }
+    cout << endl << endl;
 }
